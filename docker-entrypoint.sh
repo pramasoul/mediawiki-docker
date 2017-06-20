@@ -94,6 +94,12 @@ if [ -z "$MEDIAWIKI_DB_PORT" ]; then
 	fi
 fi
 
+# Set apache's 'ServerName' directive
+if [ -n "$MEDIAWIKI_SITE_NAME" ]; then
+    echo >&2 "Setting ServerName to $MEDIAWIKI_SITE_NAME"
+    echo "ServerName $MEDIAWIKI_SITE_NAME" >> /etc/apache2/mediawiki.conf
+fi
+
 # Wait for the DB to come up
 while [ `/bin/nc -w 1 $MEDIAWIKI_DB_HOST $MEDIAWIKI_DB_PORT < /dev/null > /dev/null; echo $?` != 0 ]; do
     echo "Waiting for database to come up at $MEDIAWIKI_DB_HOST:$MEDIAWIKI_DB_PORT..."
