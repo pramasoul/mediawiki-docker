@@ -130,6 +130,7 @@ cd /var/www/html
 ln -s /usr/src/mediawiki/* .
 
 : ${MEDIAWIKI_SHARED:=/data}
+
 if [ -d "$MEDIAWIKI_SHARED" ]; then
 	# If there is no LocalSettings.php but we have one under the shared
 	# directory, symlink it
@@ -139,7 +140,8 @@ if [ -d "$MEDIAWIKI_SHARED" ]; then
 
 	# If the images directory only contains a README, then link it to
 	# $MEDIAWIKI_SHARED/images, creating the shared directory if necessary
-	if [ "$(ls images)" = "README" -a ! -L images ]; then
+	if [ "$(ls images)" == "README" ]; then
+		echo >&2 "Using 'images' folder in data volume, creating symbolic link."
 		rm -fr images
 		mkdir -p "$MEDIAWIKI_SHARED/images"
 		ln -s "$MEDIAWIKI_SHARED/images" images
